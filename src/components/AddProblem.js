@@ -10,6 +10,7 @@ function AddProblem(props) {
   const [url, setUrl] = useState('');
   const [title, setTitle] = useState('');
   const [difficulty, setDifficulty] = useState(0);
+  const [time, setTime] = useState(0);
   const [runTime, setRunTime] = useState(0);
   const [memory, setMemory] = useState(0);
   const [status, setStatus] = useState('pass');
@@ -37,6 +38,10 @@ function AddProblem(props) {
     }
   }, 500);
 
+  const onTimeChange = (val) => {
+    setTime(val);
+  };
+
   const onRunTimeInputChange = (val) => {
     setRunTime(val);
   };
@@ -50,7 +55,7 @@ function AddProblem(props) {
   };
 
   const onSubmit = () => {
-    if (url.length < 30 || runTime === 0 || memory === 0 || title.length === 0 || difficulty === 0) {
+    if (url.length < 30 || runTime === 0 || time === 0 || memory === 0 || title.length === 0 || difficulty === 0) {
       alert('Please fill in data.')
     } else {
       setLoading(true);
@@ -59,6 +64,7 @@ function AddProblem(props) {
         url,
         title,
         difficulty,
+        time,
         runTime,
         memory,
         status
@@ -125,7 +131,7 @@ function AddProblem(props) {
             min={0}
             formatter={value => `${value}min`}
             parser={value => value.replace('min', '')}
-            onChange={onMemoryInputChange}
+            onChange={onTimeChange}
           />
         </div>
       <div className="modal__stats">

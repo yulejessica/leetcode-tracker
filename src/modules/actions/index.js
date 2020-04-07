@@ -118,7 +118,7 @@ export const getConcurProblems = () => {
 
 export const addNewProblem = (obj) => {
   return async (dispatch) => {
-    const { url, title, difficulty, runTime, memory, status } = obj;
+    const { url, title, difficulty, time, runTime, memory, status } = obj;
     
 
     dispatch({
