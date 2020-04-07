@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { Modal, Input, InputNumber, Tag } from 'antd';
+import { Modal, Input, InputNumber, Radio, Tag } from 'antd';
 import _ from 'lodash';
 
 import { addNewProblem } from '../modules/actions';
@@ -12,19 +12,18 @@ function AddProblem(props) {
   const [difficulty, setDifficulty] = useState(0);
   const [runTime, setRunTime] = useState(0);
   const [memory, setMemory] = useState(0);
+  const [status, setStatus] = useState('pass');
   const [loading, setLoading] = useState(false);
 
   const all_problems = [].concat(props.algo, props.db, props.shell, props.concur);
-  
+
   const onUrlChange = _.debounce((val) => {
-    console.log('change')
-    console.log(val);
     const rootURL = 'https://leetcode.com/problems/'
     if (val.length !== 0) {
       if (val.slice(0, 30) !== rootURL) {
         alert('Invalid URL: Please paste a valid Leetcode problem URL.');
       } else {
-        const slug = val.slice(30, url.length - 1);
+        const slug = val.slice(30, val.length - 1);
         console.log(slug)
         for (const q of all_problems) {
           if (slug === q.stat.question__title_slug) {
@@ -36,7 +35,7 @@ function AddProblem(props) {
         }
       }
     }
-  }, 1000);
+  }, 500);
 
   const onRunTimeInputChange = (val) => {
     setRunTime(val);
@@ -44,6 +43,10 @@ function AddProblem(props) {
 
   const onMemoryInputChange = (val) => {
     setMemory(val);
+  };
+
+  const onStatusChange = (val) => {
+    setStatus(val);
   };
 
   const onSubmit = () => {
@@ -58,7 +61,7 @@ function AddProblem(props) {
         difficulty,
         runTime,
         memory,
-        status: 'PASS'
+        status
       });
       setTimeout(() => {
         setLoading(false);
@@ -66,9 +69,9 @@ function AddProblem(props) {
       }, 2000);
     }
   };
-  
+
   const displayDifficulty = (num) => {
-    switch(num) {
+    switch (num) {
       case 0:
         return null;
       case 1:
@@ -93,19 +96,41 @@ function AddProblem(props) {
     >
       <div className="modal__link">
         <Input
+          placeholder="https://leetcode.com/problems/"
           onChange={(e) => onUrlChange(e.target.value)}
         />
       </div>
       <div className="modal__problem">
         <div className="modal__problem--title">
-          Title: {title}
+          <div className="modal__problem--title-label">
+            Problem:
+          </div>
+          <div className="modal__problem--title-display">
+            {title}
+          </div>
         </div>
         <div className="modal__problem--difficulty">
-          Difficulty: {displayDifficulty(difficulty)}
+          <div className="modal__problem--difficulty-label">
+            Difficulty:
+          </div>
+          <div className="modal__problem--difficulty-display">
+            {displayDifficulty(difficulty)}
+          </div>
         </div>
       </div>
+      <div className="modal__focus">
+          <div className="modal__focus-label">Time:</div>
+          <InputNumber
+            defaultValue={0}
+            min={0}
+            formatter={value => `${value}min`}
+            parser={value => value.replace('min', '')}
+            onChange={onMemoryInputChange}
+          />
+        </div>
       <div className="modal__stats">
         <div className="modal__stats--run-time">
+          Runtime: &nbsp;
           <InputNumber
             defaultValue={0}
             min={0}
@@ -115,6 +140,7 @@ function AddProblem(props) {
           />
         </div>
         <div className="modal__stats--memory">
+          Memory: &nbsp;
           <InputNumber
             defaultValue={0}
             min={0}
@@ -122,6 +148,12 @@ function AddProblem(props) {
             parser={value => value.replace('MB', '')}
             onChange={onMemoryInputChange}
           />
+        </div>
+        <div className="modal__stats--status">
+          <Radio.Group defaultValue={status} onChange={(e) => onStatusChange(e.target.value)}>
+            <Radio.Button value="pass">Pass</Radio.Button>
+            <Radio.Button value="fail">Fail</Radio.Button>
+          </Radio.Group>
         </div>
       </div>
     </Modal>
