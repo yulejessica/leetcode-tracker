@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { Modal, Input, InputNumber, Radio, Tag } from 'antd';
+import moment from 'moment';
 import _ from 'lodash';
 
 import { addNewProblem, getUserProblems } from '../modules/actions';
@@ -58,6 +59,7 @@ function AddProblem(props) {
     if (url.length < 30 || runTime === 0 || time === 0 || memory === 0 || title.length === 0 || difficulty === 0) {
       alert('Please fill in data.')
     } else {
+      const date = moment(new Date()).format('MMM Do YYYY');
       setLoading(true);
       // send data to db
       props.addNewProblem({
@@ -67,7 +69,8 @@ function AddProblem(props) {
         time,
         runTime,
         memory,
-        status
+        status,
+        date
       });
       setTimeout(() => {
         setLoading(false);

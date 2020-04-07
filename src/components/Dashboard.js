@@ -21,11 +21,11 @@ const Dashboard = (props) => {
 
   useEffect(() => {
     props.getUserProblems();
-    // props.getAlgoProblems();
-    // props.getDatabaseProblems();
-    // props.getShellProblems();
-    // props.getConcurProblems();
-    
+    props.getAlgoProblems();
+    props.getDatabaseProblems();
+    props.getShellProblems();
+    props.getConcurProblems();
+
     // eslint-disable-next-line
   }, []);
 

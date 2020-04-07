@@ -126,7 +126,7 @@ export const getConcurProblems = () => {
 
 export const addNewProblem = (obj) => {
   return async (dispatch) => {
-    const { url, title, difficulty, time, runTime, memory, status } = obj;
+    const { url, title, difficulty, time, runTime, memory, status, date } = obj;
     const uid = firebase.auth().currentUser.uid;
     const problemId = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
 
@@ -141,10 +141,12 @@ export const addNewProblem = (obj) => {
             difficulty,
             attempts: {
               [problemId]: {
+                id: problemId,
                 time,
                 runTime,
                 memory,
-                status
+                status,
+                date
               }
             }
           }, { merge: true });
@@ -156,10 +158,12 @@ export const addNewProblem = (obj) => {
             difficulty,
             attempts: {
               [problemId]: {
+                id: problemId,
                 time,
                 runTime,
                 memory,
-                status
+                status,
+                date
               }
             }
           });

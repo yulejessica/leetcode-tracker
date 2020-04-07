@@ -104,6 +104,23 @@
   }
 }
 
+.attempt {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  align-items: center;
+  justify-items: left;
+  width: 100%;
+
+  &-header {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    align-items: center;
+  justify-items: left;
+    width: 100%;
+    padding: 0 20px;
+  }
+}
+
 
 .ant-list-item {
   padding: 12px 20px !important;
