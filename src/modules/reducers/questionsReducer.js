@@ -10,13 +10,13 @@ const INITIAL_STATE = {
 export default (state = INITIAL_STATE, action) => {
     switch (action.type) {
         case GET_ALGO_QS:
-            return {...state, algo: action.payload }
+            return {...state, algo: action.payload };
         case GET_DB_QS:
-            return {...state, db: action.payload }
+            return {...state, db: action.payload };
         case GET_SHELL_QS:
-            return {...state, shell: action.payload }
+            return {...state, shell: action.payload };
         case GET_CONCUR_QS:
-            return {...state, concur: action.payload }
+            return {...state, concur: action.payload };
         default:
             return state;
     }

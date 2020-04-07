@@ -5,6 +5,7 @@ import {
   SIGN_IN,
   SIGN_OUT,
   ADD_PROBLEM,
+  GET_USER_QS,
   GET_ALGO_QS,
   GET_DB_QS,
   GET_SHELL_QS,
@@ -21,16 +22,6 @@ const db = firebase.firestore();
 
 
 export const signIn = user => {
-  // db.collection(user.uid).doc('tags').get()
-  // .then((doc) => {
-  //     if (!doc.exists) {
-  //         db.collection(user.uid).doc('tags').set({
-  //             success: 'Tag 1',
-  //             warning: 'Tag 2',
-  //             error: 'Tag 3'
-  //         })
-  //     }
-  // })
   return {
     type: SIGN_IN,
     payload: user
@@ -44,19 +35,36 @@ export const signOut = () => {
   };
 };
 
+export const getUserProblems = () => {
+  return async (dispatch) => {
+    let test = [];
+    await db.collection(firebase.auth().currentUser.uid).get()
+    .then(snapshot => {
+      snapshot.docs.forEach(doc => {
+        // console.log(doc.data());
+        test.push(doc.data());
+      });
+    })
+    dispatch({
+      type: GET_USER_QS,
+      payload: test
+    })
+  };
+};
+
 export const getAlgoProblems = () => {
   return async (dispatch) => {
     const url = 'https://cors-anywhere.herokuapp.com/https://leetcode.com/api/problems/algorithms/';
     await request(url, (err, res, html) => {
       if (!err && res.statusCode === 200) {
-        const content = JSON.parse(res.body);        
+        const content = JSON.parse(res.body);
         const questions = content.stat_status_pairs;
         dispatch({
           type: GET_ALGO_QS,
           payload: questions
         })
       } else {
-        console.log('didnt go through')
+        console.log('didnt go through');
       }
     });
   };
@@ -67,7 +75,7 @@ export const getDatabaseProblems = () => {
     const url = 'https://cors-anywhere.herokuapp.com/https://leetcode.com/api/problems/database/';
     await request(url, (err, res, html) => {
       if (!err && res.statusCode === 200) {
-        const content = JSON.parse(res.body);        
+        const content = JSON.parse(res.body);
         const questions = content.stat_status_pairs;
         dispatch({
           type: GET_DB_QS,
@@ -85,7 +93,7 @@ export const getShellProblems = () => {
     const url = 'https://cors-anywhere.herokuapp.com/https://leetcode.com/api/problems/shell/';
     await request(url, (err, res, html) => {
       if (!err && res.statusCode === 200) {
-        const content = JSON.parse(res.body);        
+        const content = JSON.parse(res.body);
         const questions = content.stat_status_pairs;
         dispatch({
           type: GET_SHELL_QS,
@@ -103,7 +111,7 @@ export const getConcurProblems = () => {
     const url = 'https://cors-anywhere.herokuapp.com/https://leetcode.com/api/problems/concurrency/';
     await request(url, (err, res, html) => {
       if (!err && res.statusCode === 200) {
-        const content = JSON.parse(res.body);   
+        const content = JSON.parse(res.body);
         const questions = content.stat_status_pairs;
         dispatch({
           type: GET_CONCUR_QS,
@@ -119,8 +127,44 @@ export const getConcurProblems = () => {
 export const addNewProblem = (obj) => {
   return async (dispatch) => {
     const { url, title, difficulty, time, runTime, memory, status } = obj;
-    
+    const uid = firebase.auth().currentUser.uid;
+    const problemId = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
 
+    // problem in db ? merge : create
+    db.collection(uid).doc(title).get()
+      .then(doc => {
+        if (doc.exists) {
+          console.log('exists', doc);
+          db.collection(uid).doc(title).set({
+            title,
+            url,
+            difficulty,
+            attempts: {
+              [problemId]: {
+                time,
+                runTime,
+                memory,
+                status
+              }
+            }
+          }, { merge: true });
+        } else {
+          console.log('empty');
+          db.collection(uid).doc(title).set({
+            title,
+            url,
+            difficulty,
+            attempts: {
+              [problemId]: {
+                time,
+                runTime,
+                memory,
+                status
+              }
+            }
+          });
+        }
+      });
     dispatch({
       type: ADD_PROBLEM,
     });

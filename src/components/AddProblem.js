@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { Modal, Input, InputNumber, Radio, Tag } from 'antd';
 import _ from 'lodash';
 
-import { addNewProblem } from '../modules/actions';
+import { addNewProblem, getUserProblems } from '../modules/actions';
 
 function AddProblem(props) {
 
@@ -30,7 +30,7 @@ function AddProblem(props) {
           if (slug === q.stat.question__title_slug) {
             console.log('hit');
             setUrl(val);
-            setTitle(q.stat.question__title);
+            setTitle(`${q.stat.question_id}. ${q.stat.question__title}`);
             setDifficulty(q.difficulty.level);
           }
         }
@@ -72,6 +72,7 @@ function AddProblem(props) {
       setTimeout(() => {
         setLoading(false);
         props.setVisible(false);
+        props.getUserProblems();
       }, 2000);
     }
   };
@@ -176,5 +177,6 @@ const mapStateToProps = state => {
 };
 
 export default connect(mapStateToProps, {
-  addNewProblem
+  addNewProblem,
+  getUserProblems
 })(AddProblem);

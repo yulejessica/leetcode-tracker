@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useEffect } from 'react';
+import { connect } from 'react-redux';
 import { List, Avatar, Tag } from 'antd';
 import { BulbOutlined, ClockCircleOutlined, FormOutlined } from '@ant-design/icons';
 
@@ -11,19 +12,10 @@ const IconText = ({ icon, text }) => (
   </span>
 );
 
-function ProblemsList(props) {
-  const listData = [];
-  for (let i = 0; i < 23; i++) {
-    listData.push({
-      href: 'http://ant.design',
-      title: `ant design part ${i}`,
-      avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
-      description:
-        'Ant Design, a design language for background applications, is refined by Ant UED Team.',
-      content:
-        'We supply a series of design principles, practical patterns and high quality design resources (Sketch and Axure), to help people create their product prototypes beautifully and efficiently.',
-    });
-  }
+const ProblemsList = (props) => {
+
+  useEffect(() => {
+  }, [props.userProblems]);
 
   return (
     <div className="problems-list widget">
@@ -36,7 +28,7 @@ function ProblemsList(props) {
           },
           pageSize: 5,
         }}
-        dataSource={listData}
+        dataSource={props.userProblems}
         renderItem={item => (
           <List.Item
             key={item.title}
@@ -48,9 +40,9 @@ function ProblemsList(props) {
           >
             <List.Item.Meta
               avatar={<Avatar style={{ backgroundColor: 'rgba(40, 85, 218, .65)' }} icon={<BulbOutlined />} size='small' />}
-              title={<a href={item.href}>{item.title}</a>}
+              title={<a href={item.url} target="_blank" rel="noopener noreferrer">{item.title}</a>}
             />
-            <ProblemDetail />
+            <ProblemDetail attempts={item.attempts}/>
           </List.Item>
         )}
       />
@@ -58,4 +50,10 @@ function ProblemsList(props) {
   )
 };
 
-export default ProblemsList;
+const mapStateToProps = state => {
+  return {
+    userProblems: state.userProblems.problems
+  }
+};
+
+export default connect(mapStateToProps)(ProblemsList);
