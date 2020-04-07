@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
+import { connect } from 'react-redux';
 import { Modal, Input, InputNumber } from 'antd';
-import _ from 'lodash';
+
+import { addNewProblem } from '../modules/actions';
 
 function AddProblem(props) {
 
@@ -9,10 +11,14 @@ function AddProblem(props) {
   const [memory, setMemory] = useState(0);
   const [loading, setLoading] = useState(false);
   
-  const onUrlChange = _.debounce((val) => {
-    console.log(val)
-    setUrl(val);
-  }, 500);
+  const onUrlChange = (val) => {
+    const rootURL = 'https://leetcode.com/problems/'
+    if (val.slice(0, 30) !== rootURL) {
+      alert('Invalid URL: Please paste a valid Leetcode problem URL.');
+    } else {
+      setUrl(val);
+    }
+  };
 
   const onRunTimeInputChange = (val) => {
     setRunTime(val);
@@ -23,12 +29,22 @@ function AddProblem(props) {
   };
 
   const onSubmit = () => {
-    setLoading(true);
-    setTimeout(() => {
-      console.log(runTime, memory)
-      setLoading(false);
-      props.setVisible(false);
-    }, 2000);
+    if (url.length < 30 || runTime === 0 || memory === 0) {
+      alert('Please fill in data.')
+    } else {
+      setLoading(true);
+      // send data to db
+      props.addNewProblem({
+        url,
+        runTime,
+        memory,
+        status: 'PASS'
+      });
+      setTimeout(() => {
+        setLoading(false);
+        props.setVisible(false);
+      }, 2000);
+    }
   };
 
   return (
@@ -41,7 +57,7 @@ function AddProblem(props) {
       onCancel={() => props.setVisible(false)}
     >
       <div className="modal__link">
-        <Input 
+        <Input
           onChange={(e) => onUrlChange(e.target.value)}
         />
       </div>
@@ -52,7 +68,7 @@ function AddProblem(props) {
             min={0}
             formatter={value => `${value}ms`}
             parser={value => value.replace('ms', '')}
-            onChange={_.debounce(onRunTimeInputChange, 700)}
+            onChange={onRunTimeInputChange}
           />
         </div>
         <div className="modal__stats--memory">
@@ -61,7 +77,7 @@ function AddProblem(props) {
             min={0}
             formatter={value => `${value}MB`}
             parser={value => value.replace('MB', '')}
-            onChange={_.debounce(onMemoryInputChange, 700)}
+            onChange={onMemoryInputChange}
           />
         </div>
       </div>
@@ -69,4 +85,6 @@ function AddProblem(props) {
   );
 };
 
-export default AddProblem;
+export default connect(null, {
+  addNewProblem
+})(AddProblem);
