@@ -1,14 +1,24 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import { connect } from 'react-redux';
 import { Layout, Button, Tag } from 'antd';
 
 import ProblemsList from './ProblemsList';
 import Progress from './Progress';
 import AddProblem from './AddProblem';
 
+import { getAlgoProblems, getDatabaseProblems, getShellProblems, getConcurProblems } from '../modules/actions';
+
 const { Header, Content } = Layout;
 
 const Dashboard = (props) => {
   const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    props.getAlgoProblems();
+    props.getDatabaseProblems();
+    props.getShellProblems();
+    props.getConcurProblems();
+  }, [])
 
   return (
     <Layout className="layout">
@@ -34,4 +44,9 @@ const Dashboard = (props) => {
   )
 };
 
-export default Dashboard;
+export default connect(null, {
+  getAlgoProblems,
+  getDatabaseProblems,
+  getShellProblems,
+  getConcurProblems
+})(Dashboard);

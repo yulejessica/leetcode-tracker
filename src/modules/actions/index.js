@@ -1,13 +1,14 @@
 import firebase from 'firebase';
 import request from 'request';
-import cheerio from 'cheerio';
-// import { Builder, By, Key, until } from 'selenium-webdriver';
-// import firefox from 'selenium-webdriver/firefox';
 import { firebaseKey } from '../../config/keys';
 import {
   SIGN_IN,
   SIGN_OUT,
   ADD_PROBLEM,
+  GET_ALGO_QS,
+  GET_DB_QS,
+  GET_SHELL_QS,
+  GET_CONCUR_QS
 } from './types';
 
 firebase.initializeApp({
@@ -16,8 +17,8 @@ firebase.initializeApp({
   databaseURL: 'leetcode-progress-tracker.firebaseio.com/',
   projectId: 'leetcode-progress-tracker'
 });
-
 const db = firebase.firestore();
+
 
 export const signIn = user => {
   // db.collection(user.uid).doc('tags').get()
@@ -43,42 +44,82 @@ export const signOut = () => {
   };
 };
 
+export const getAlgoProblems = () => {
+  return async (dispatch) => {
+    const url = 'https://cors-anywhere.herokuapp.com/https://leetcode.com/api/problems/algorithms/';
+    await request(url, (err, res, html) => {
+      if (!err && res.statusCode === 200) {
+        const content = JSON.parse(res.body);        
+        const questions = content.stat_status_pairs;
+        dispatch({
+          type: GET_ALGO_QS,
+          payload: questions
+        })
+      } else {
+        console.log('didnt go through')
+      }
+    });
+  };
+};
+
+export const getDatabaseProblems = () => {
+  return async (dispatch) => {
+    const url = 'https://cors-anywhere.herokuapp.com/https://leetcode.com/api/problems/database/';
+    await request(url, (err, res, html) => {
+      if (!err && res.statusCode === 200) {
+        const content = JSON.parse(res.body);        
+        const questions = content.stat_status_pairs;
+        dispatch({
+          type: GET_DB_QS,
+          payload: questions
+        })
+      } else {
+        console.log('didnt go through')
+      }
+    });
+  };
+};
+
+export const getShellProblems = () => {
+  return async (dispatch) => {
+    const url = 'https://cors-anywhere.herokuapp.com/https://leetcode.com/api/problems/shell/';
+    await request(url, (err, res, html) => {
+      if (!err && res.statusCode === 200) {
+        const content = JSON.parse(res.body);        
+        const questions = content.stat_status_pairs;
+        dispatch({
+          type: GET_SHELL_QS,
+          payload: questions
+        })
+      } else {
+        console.log('didnt go through')
+      }
+    });
+  };
+};
+
+export const getConcurProblems = () => {
+  return async (dispatch) => {
+    const url = 'https://cors-anywhere.herokuapp.com/https://leetcode.com/api/problems/concurrency/';
+    await request(url, (err, res, html) => {
+      if (!err && res.statusCode === 200) {
+        const content = JSON.parse(res.body);   
+        const questions = content.stat_status_pairs;
+        dispatch({
+          type: GET_CONCUR_QS,
+          payload: questions
+        })
+      } else {
+        console.log('didnt go through')
+      }
+    });
+  };
+};
+
 export const addNewProblem = (obj) => {
   return async (dispatch) => {
-    const { url, runTime, memory, status } = obj;
-
-    // const corsUrl = 'https://cors-anywhere.herokuapp.com/' + url;
-
-    // let title = '';
-    // let difficulty = '';
-    // await request(corsUrl, (err, res, html) => {
-    //   if (!err && res.statusCode === 200) {
-    //     const $ = cheerio.load(html);
-    //     const getTitle = $('.css-v3d350');
-    //     const getDifficulty = $('.css-14oi08n')
-
-    //     title = getTitle.text();
-    //     difficulty = getDifficulty.text()
-    //     console.log(getTitle.text(), getDifficulty.text())
-    //   } else {
-    //     console.log('didnt go through')
-    //   }
-    // });
-
-    // let driver = await new Builder().forBrowser('firefox').build();
-    // try {
-    //   await driver.get(url);
-    //   await driver.findElement(By.class('css-v3d350')).then(e => {
-    //     e.getText().then(function (text) {
-    //       console.log(text);
-    //     });
-    //   });
-
-    // } finally {
-    //   await driver.quit();
-    // }
-
-    // console.log(title, difficulty);
+    const { url, title, difficulty, runTime, memory, status } = obj;
+    
 
     dispatch({
       type: ADD_PROBLEM,
