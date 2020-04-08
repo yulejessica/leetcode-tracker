@@ -105,6 +105,7 @@
       align-items: center;
       justify-content: space-between; }
     .progress-container .progress__breakdown {
+      align-self: flex-start;
       width: 90%; }
     .progress-container .progress__averages {
       width: 100%;
