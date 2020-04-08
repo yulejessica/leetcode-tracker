@@ -18,14 +18,19 @@ const { Header, Content } = Layout;
 
 const Dashboard = (props) => {
   const [visible, setVisible] = useState(false);
+  const [filter, setFilter] = useState(0);
+
+  const onFilterChange = (val) => {
+
+  };
 
   useEffect(() => {
-    props.getUserProblems();
     props.getAlgoProblems();
     props.getDatabaseProblems();
     props.getShellProblems();
     props.getConcurProblems();
-
+    props.getUserProblems();
+    
     // eslint-disable-next-line
   }, []);
 
@@ -36,15 +41,16 @@ const Dashboard = (props) => {
         <div className="dashboard-container">
           <div className="list-config widget">
             <div className="list-config__tags">
-              <Tag color="green">Easy</Tag>
-              <Tag color="gold">Medium</Tag>
-              <Tag color="red">Hard</Tag>
+              <Tag onClick={() => setFilter(0)}>All</Tag>
+              <Tag color="green" onClick={() => setFilter(1)}>Easy</Tag>
+              <Tag color="gold" onClick={() => setFilter(2)}>Medium</Tag>
+              <Tag color="red" onClick={() => setFilter(3)}>Hard</Tag>
             </div>
             <div className="list-config__add">
               <Button type="primary" size="small" onClick={() => setVisible(true)}>+</Button>
             </div>
           </div>
-          <ProblemsList />
+          <ProblemsList filter={filter}/>
           <Progress />
         </div>
         <AddProblem visible={visible} setVisible={setVisible} />

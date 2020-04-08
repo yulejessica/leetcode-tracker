@@ -19,7 +19,7 @@
   align-items: center;
   padding: 0 30px; }
   .list-config__tags {
-    width: 220px;
+    width: 250px;
     display: flex;
     flex-direction: row;
     justify-content: space-between; }

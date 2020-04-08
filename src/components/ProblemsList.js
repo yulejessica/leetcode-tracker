@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { List, Avatar, Tag } from 'antd';
 import { BulbOutlined, ClockCircleOutlined, FormOutlined } from '@ant-design/icons';
@@ -13,6 +13,20 @@ const IconText = ({ icon, text }) => (
 );
 
 const ProblemsList = (props) => {
+
+  let listData = [];
+  const setData = (arr) => {
+    for (const data of arr) {
+      if (props.filter === 0) {
+        listData.push(data);
+      } else {
+        if (data.difficulty === props.filter) {
+          listData.push(data);
+        }
+      }
+    }
+  };
+  setData(props.userProblems);
 
   const color = (num) => {
     switch (num) {
@@ -50,6 +64,8 @@ const ProblemsList = (props) => {
 
   useEffect(() => {
   }, [props.userProblems]);
+  useEffect(() => {
+  }, [props.filter]);
 
   return (
     <div className="problems-list widget">
@@ -62,7 +78,7 @@ const ProblemsList = (props) => {
           },
           pageSize: 5,
         }}
-        dataSource={props.userProblems}
+        dataSource={listData}
         renderItem={item => (
           <List.Item
             key={item.title}

@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import { Collapse, List, Avatar } from 'antd';
 import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
+import moment from 'moment';
 
 const { Panel } = Collapse;
 
@@ -10,6 +11,11 @@ function ProblemDetail(props) {
     for (const attempt in data) {
       listData.push(data[attempt]);
     }
+    listData.sort(function (a, b) {
+      a = new Date(a.date);
+      b = new Date(b.date);
+      return a > b ? -1 : a < b ? 1 : 0;
+    });
   };
 
   function setStatus(status) {
@@ -37,6 +43,7 @@ function ProblemDetail(props) {
               <div>Date</div>
             </div>
           }
+          // loading={'true'}
           dataSource={listData}
           renderItem={item => (
             <List.Item>
@@ -54,7 +61,8 @@ function ProblemDetail(props) {
                   {item.memory} MB
                 </div>
                 <div className="attempt__date">
-                  {item.date}
+                  {moment(Date(item.date)).format('MMM Do YYYY')}
+                  {/* {console.log(Date(item.date))} */}
                 </div>
               </div>
             </List.Item>

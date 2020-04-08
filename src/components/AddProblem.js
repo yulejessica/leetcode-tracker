@@ -21,23 +21,34 @@ function AddProblem(props) {
 
   const onUrlChange = _.debounce((val) => {
     const rootURL = 'https://leetcode.com/problems/'
+    const solution = 'solution/';
+    const submissions = 'submissions/';
+    let givenURL = val;
     if (val.length !== 0) {
       if (val.slice(0, 30) !== rootURL) {
         alert('Invalid URL: Please paste a valid Leetcode problem URL.');
       } else {
-        const slug = val.slice(30, val.length - 1);
-        console.log(slug)
+        if (val.slice(val.length - 9, val.length) === solution) {
+          console.log('sol');
+          givenURL = val.slice(0, val.length - 9);
+        } else if (val.slice(val.length - 12, val.length) === submissions) {
+          console.log('sub');
+          givenURL = val.slice(0, val.length - 12);
+        }
+        setUrl(givenURL);
+        const slug = givenURL.slice(30, val.length - 1);
+        console.log(slug);
         for (const q of all_problems) {
           if (slug === q.stat.question__title_slug) {
             console.log('hit');
-            setUrl(val);
+            setUrl(givenURL);
             setTitle(`${q.stat.question_id}. ${q.stat.question__title}`);
             setDifficulty(q.difficulty.level);
           }
         }
       }
     }
-  }, 500);
+  }, 100);
 
   const onTimeChange = (val) => {
     setTime(val);
@@ -59,7 +70,7 @@ function AddProblem(props) {
     if (url.length < 30 || runTime === 0 || time === 0 || memory === 0 || title.length === 0 || difficulty === 0) {
       alert('Please fill in data.')
     } else {
-      const date = moment(new Date()).format('MMM Do YYYY');
+      const date = moment().format();
       setLoading(true);
       // send data to db
       props.addNewProblem({
@@ -73,6 +84,13 @@ function AddProblem(props) {
         date
       });
       setTimeout(() => {
+        setUrl('');
+        setTitle('');
+        setDifficulty(0);
+        setTime(0);
+        setRunTime(0);
+        setMemory(0);
+        setStatus('pass');
         setLoading(false);
         props.setVisible(false);
         props.getUserProblems();
@@ -107,6 +125,7 @@ function AddProblem(props) {
       <div className="modal__link">
         <Input
           placeholder="https://leetcode.com/problems/"
+          value={url}
           onChange={(e) => onUrlChange(e.target.value)}
         />
       </div>
@@ -131,7 +150,7 @@ function AddProblem(props) {
       <div className="modal__focus">
           <div className="modal__focus-label">Time:</div>
           <InputNumber
-            defaultValue={0}
+            value={time}
             min={0}
             formatter={value => `${value}min`}
             parser={value => value.replace('min', '')}
@@ -142,7 +161,7 @@ function AddProblem(props) {
         <div className="modal__stats--run-time">
           Runtime: &nbsp;
           <InputNumber
-            defaultValue={0}
+            value={runTime}
             min={0}
             formatter={value => `${value}ms`}
             parser={value => value.replace('ms', '')}
@@ -152,7 +171,7 @@ function AddProblem(props) {
         <div className="modal__stats--memory">
           Memory: &nbsp;
           <InputNumber
-            defaultValue={0}
+            value={memory}
             min={0}
             formatter={value => `${value}MB`}
             parser={value => value.replace('MB', '')}
@@ -160,7 +179,7 @@ function AddProblem(props) {
           />
         </div>
         <div className="modal__stats--status">
-          <Radio.Group defaultValue={status} onChange={(e) => onStatusChange(e.target.value)}>
+          <Radio.Group value={status} onChange={(e) => onStatusChange(e.target.value)}>
             <Radio.Button value="pass">Pass</Radio.Button>
             <Radio.Button value="fail">Fail</Radio.Button>
           </Radio.Group>
