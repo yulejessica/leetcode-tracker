@@ -28,6 +28,7 @@ function ProblemDetail(props) {
 
   useEffect(() => {
     setList(props.attempts)
+    // eslint-disable-next-line
   }, [props.attempts])
 
   return (

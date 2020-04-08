@@ -86,7 +86,8 @@
     align-items: center;
     justify-items: left;
     width: 100%;
-    padding: 0 20px; }
+    padding: 0 20px;
+    font-weight: 500; }
 
 .progress-container {
   grid-row: 1 / 2; }
@@ -95,10 +96,19 @@
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
-    padding: 40px 30px;
+    padding: 45px 30px;
     height: 500px; }
+    .progress-container .progress__total {
+      height: 170px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between; }
     .progress-container .progress__breakdown {
-      width: 100%; }
+      width: 90%; }
+
+.ant-progress-text {
+  padding: 10px; }
 
 .ant-list-item {
   padding: 12px 20px !important; }

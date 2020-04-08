@@ -64,6 +64,7 @@ export const getAlgoProblemsIntent = () => {
     dispatch(getAlgoProblems());
   };
 };
+
 export const getDatabaseProblemsIntent = () => {
   return (dispatch) => {
     dispatch({
@@ -72,6 +73,7 @@ export const getDatabaseProblemsIntent = () => {
     dispatch(getDatabaseProblems());
   };
 };
+
 export const getShellProblemsIntent = () => {
   return (dispatch) => {
     dispatch({
@@ -80,6 +82,7 @@ export const getShellProblemsIntent = () => {
     dispatch(getShellProblems());
   };
 };
+
 export const getConcurProblemsIntent = () => {
   return (dispatch) => {
     dispatch({

@@ -115,9 +115,10 @@
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     align-items: center;
-  justify-items: left;
+    justify-items: left;
     width: 100%;
     padding: 0 20px;
+    font-weight: 500;
   }
 }
 
@@ -129,18 +130,25 @@
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
-    padding: 40px 30px;
+    padding: 45px 30px;
     height: 500px;
 
     &__total {
-      // width: 100%;
+      height: 170px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
     }
     &__breakdown {
-      width: 100%;
+      width: 90%;
     }
   }
 }
 
+.ant-progress-text {
+  padding: 10px;
+}
 
 .ant-list-item {
   padding: 12px 20px !important;
