@@ -30,10 +30,10 @@ function AddProblem(props) {
       } else {
         if (val.slice(val.length - 9, val.length) === solution) {
           console.log('sol');
-          givenURL = val.slice(0, val.length - 9);
+          givenURL = val.slice(0, val.length - 10);
         } else if (val.slice(val.length - 12, val.length) === submissions) {
           console.log('sub');
-          givenURL = val.slice(0, val.length - 12);
+          givenURL = val.slice(0, val.length - 13);
         }
         setUrl(givenURL);
         const slug = givenURL.slice(30, val.length - 1);

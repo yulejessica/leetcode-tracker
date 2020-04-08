@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { connect } from 'react-redux';
 import { Layout, Button, Tag } from 'antd';
+import { LogoutOutlined } from '@ant-design/icons';
 import { WaveTopBottomLoading } from 'react-loadingg';
 
 import ProblemsList from './ProblemsList';
@@ -12,7 +13,8 @@ import {
   getDatabaseProblemsIntent,
   getShellProblemsIntent,
   getConcurProblemsIntent,
-  getUserProblems
+  getUserProblems,
+  signOut
 } from '../modules/actions';
 
 const { Header, Content } = Layout;
@@ -28,7 +30,16 @@ const Dashboard = (props) => {
     } else {
       return (
         <Layout className="layout">
-          <Header style={{ backgroundColor: 'white', height: '65px', fontSize: '24px', fontWeight: '300' }} >Leetcode Progress Tracker</Header>
+          <Header style={{ backgroundColor: 'white', height: '65px', fontSize: '24px', fontWeight: '300' }} >
+            <div className="header-nav">
+              <div className="header-nav__title">
+                Leetcode Progress Tracker
+              </div>
+              <div className="header-nav__logout" onClick={() => props.signOut()}>
+                <LogoutOutlined />
+              </div>
+            </div>
+          </Header>
           <Content style={{ padding: '20px 50px', backgroundColor: 'rgba(242, 246, 248, 1)', minHeight: '93vh' }}>
             <div className="dashboard-container">
               <div className="list-config widget">
@@ -80,5 +91,6 @@ export default connect(mapStateToProps, {
   getDatabaseProblemsIntent,
   getShellProblemsIntent,
   getConcurProblemsIntent,
-  getUserProblems
+  getUserProblems,
+  signOut
 })(Dashboard);

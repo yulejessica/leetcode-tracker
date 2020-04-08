@@ -1,3 +1,15 @@
+.header-nav {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%; }
+  .header-nav__logout {
+    margin-right: 5px;
+    cursor: pointer;
+    transition: color 0.3s cubic-bezier(0.645, 0.045, 0.355, 1); }
+    .header-nav__logout:hover {
+      color: #1890ff; }
+
 .dashboard-container {
   display: grid;
   grid-template-columns: 2fr 1fr;
