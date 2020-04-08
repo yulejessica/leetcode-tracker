@@ -9,7 +9,11 @@ import {
   GET_ALGO_QS,
   GET_DB_QS,
   GET_SHELL_QS,
-  GET_CONCUR_QS
+  GET_CONCUR_QS,
+  GET_ALGO_QS_INTENT,
+  GET_DB_QS_INTENT,
+  GET_SHELL_QS_INTENT,
+  GET_CONCUR_QS_INTENT,
 } from './types';
 
 firebase.initializeApp({
@@ -49,6 +53,39 @@ export const getUserProblems = () => {
       type: GET_USER_QS,
       payload: test
     })
+  };
+};
+
+export const getAlgoProblemsIntent = () => {
+  return (dispatch) => {
+    dispatch({
+      type: GET_ALGO_QS_INTENT
+    });
+    dispatch(getAlgoProblems());
+  };
+};
+export const getDatabaseProblemsIntent = () => {
+  return (dispatch) => {
+    dispatch({
+      type: GET_DB_QS_INTENT
+    });
+    dispatch(getDatabaseProblems());
+  };
+};
+export const getShellProblemsIntent = () => {
+  return (dispatch) => {
+    dispatch({
+      type: GET_SHELL_QS_INTENT
+    });
+    dispatch(getShellProblems());
+  };
+};
+export const getConcurProblemsIntent = () => {
+  return (dispatch) => {
+    dispatch({
+      type: GET_CONCUR_QS_INTENT
+    });
+    dispatch(getConcurProblems());
   };
 };
 
