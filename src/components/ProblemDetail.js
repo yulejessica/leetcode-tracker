@@ -62,8 +62,8 @@ function ProblemDetail(props) {
                   {item.memory} MB
                 </div>
                 <div className="attempt__date">
-                  {moment(Date(item.date)).format('MMM Do YYYY')}
-                  {/* {console.log(Date(item.date))} */}
+                  {moment(new Date(item.date)).format('MMM Do YYYY')}
+                  {console.log(new Date(item.date))}
                 </div>
               </div>
             </List.Item>

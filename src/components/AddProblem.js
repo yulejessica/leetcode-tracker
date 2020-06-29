@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import { Modal, Input, InputNumber, Radio, Tag } from 'antd';
 import moment from 'moment';
 import _ from 'lodash';
@@ -16,6 +16,8 @@ function AddProblem(props) {
   const [memory, setMemory] = useState(0);
   const [status, setStatus] = useState('pass');
   const [loading, setLoading] = useState(false);
+
+  const dispatch = useDispatch();
 
   const all_problems = [].concat(props.algo, props.db, props.shell, props.concur);
 
@@ -67,13 +69,13 @@ function AddProblem(props) {
   };
 
   const onSubmit = () => {
-    if (url.length < 30 || runTime === 0 || time === 0 || memory === 0 || title.length === 0 || difficulty === 0) {
+    if (url.length < 30 || time === 0 || memory === 0 || title.length === 0 || difficulty === 0) {
       alert('Please fill in data.')
     } else {
       const date = moment().format();
       setLoading(true);
       // send data to db
-      props.addNewProblem({
+      dispatch(addNewProblem({
         url,
         title,
         difficulty,
@@ -82,7 +84,7 @@ function AddProblem(props) {
         memory,
         status,
         date
-      });
+      }))
       setTimeout(() => {
         setUrl('');
         setTitle('');
@@ -93,7 +95,8 @@ function AddProblem(props) {
         setStatus('pass');
         setLoading(false);
         props.setVisible(false);
-        props.getUserProblems();
+        dispatch(getUserProblems())
+      
       }, 2000);
     }
   };
@@ -199,6 +202,6 @@ const mapStateToProps = state => {
 };
 
 export default connect(mapStateToProps, {
-  addNewProblem,
-  getUserProblems
+  // addNewProblem,
+  // getUserProblems
 })(AddProblem);

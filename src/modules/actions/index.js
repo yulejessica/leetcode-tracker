@@ -55,6 +55,14 @@ export const getUserProblems = () => {
     })
   };
 };
+export const getProblemsDispatch = () => {
+  return (dispatch) => {
+    dispatch(getAlgoProblemsIntent())
+    dispatch(getDatabaseProblemsIntent())
+    dispatch(getShellProblemsIntent())
+    dispatch(getConcurProblemsIntent())
+  }
+}
 
 export const getAlgoProblemsIntent = () => {
   return (dispatch) => {
@@ -212,6 +220,7 @@ export const addNewProblem = (obj) => {
     dispatch({
       type: ADD_PROBLEM,
     });
+    return;
   };
 };
 

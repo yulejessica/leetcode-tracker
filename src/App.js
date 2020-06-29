@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import firebase from 'firebase';
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 
 import Auth from './components/Auth';
 import Dashboard from './components/Dashboard';
 
-import { signIn, signOut } from './modules/actions';
+import { signIn } from './modules/actions';
 
 import './style/css/App.css';
 
@@ -13,12 +13,14 @@ const App = (props) => {
 
   const [authenticating, isAutheticating] = useState(true);
 
+  const dispatch = useDispatch()
+
   const authUser = () => {
     return new Promise(function (resolve, reject) {
       firebase.auth().onAuthStateChanged(user => {
         if (user) {
           resolve(user);
-          props.signIn(user);
+          dispatch(signIn(user));        
         } else {
           reject('user not logged in');
         }
@@ -53,7 +55,4 @@ const mapStateToProps = (state) => {
   }
 };
 
-export default connect(mapStateToProps, {
-  signIn,
-  signOut
-})(App);
+export default connect(mapStateToProps)(App);

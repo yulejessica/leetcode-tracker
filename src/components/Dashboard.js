@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import { Layout, Button, Tag } from 'antd';
 import { LogoutOutlined } from '@ant-design/icons';
 import { WaveTopBottomLoading } from 'react-loadingg';
@@ -9,10 +9,7 @@ import Progress from './Progress';
 import AddProblem from './AddProblem';
 
 import {
-  getAlgoProblemsIntent,
-  getDatabaseProblemsIntent,
-  getShellProblemsIntent,
-  getConcurProblemsIntent,
+  getProblemsDispatch,
   getUserProblems,
   signOut
 } from '../modules/actions';
@@ -22,6 +19,7 @@ const { Header, Content } = Layout;
 const Dashboard = (props) => {
   const [visible, setVisible] = useState(false);
   const [filter, setFilter] = useState(0);
+  const dispatch = useDispatch()
 
   function renderDisplay() {
     // if any callsInProgress contain true, render loader
@@ -64,12 +62,8 @@ const Dashboard = (props) => {
   }
 
   useEffect(() => {
-    props.getAlgoProblemsIntent();
-    props.getDatabaseProblemsIntent();
-    props.getShellProblemsIntent();
-    props.getConcurProblemsIntent();
-    props.getUserProblems();
-
+    dispatch(getProblemsDispatch())
+    dispatch(getUserProblems())
     // eslint-disable-next-line
   }, []);
 
@@ -87,10 +81,5 @@ const mapStateToProps = state => {
 };
 
 export default connect(mapStateToProps, {
-  getAlgoProblemsIntent,
-  getDatabaseProblemsIntent,
-  getShellProblemsIntent,
-  getConcurProblemsIntent,
-  getUserProblems,
   signOut
 })(Dashboard);
